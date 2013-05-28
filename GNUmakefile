@@ -1,4 +1,5 @@
 CXX=g++
+AR=ar
 #CXX=clang++
 
 CXXFLAGS+=-Wall
@@ -14,7 +15,7 @@ lib/:
 	mkdir -p $@
 
 lib/libeljson.so: src/json.o src/parse.o
-	$(CXX) -fPIC -shared $^ -o $@
+	$(CXX) -fPIC -shared -Wl,-soname,libeljson.so $^ -o $@
 
 src/json.o: src/json.cpp include/json.hpp
 	$(CXX) -fPIC $(CXXFLAGS) -c src/json.cpp -o $@
