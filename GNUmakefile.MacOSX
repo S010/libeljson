@@ -1,0 +1,42 @@
+CXX=clang++
+
+CXXFLAGS+=-Wall
+CXXFLAGS+=-std=c++11
+CXXFLAGS+=-O2
+CXXFLAGS+=-dynamic
+CXXFLAGS+=-Iinclude
+CXXFLAGS+=-I/usr/lib/c++/v1
+
+LDFLAGS+=-Llib
+LDFLAGS+=-lc++
+
+VERSION=0.0.1
+
+all: lib/ lib/libeljson.so
+
+lib/:
+	mkdir -p $@
+
+lib/libeljson.so: src/json.o src/parse.o
+	libtool -dynamic -o $@ -lc++ -lc -current_version $(VERSION) $^
+
+src/json.o: src/json.cpp include/json.hpp
+	$(CXX) $(CXXFLAGS) -c src/json.cpp -o $@
+
+src/parse.o: src/parse.cpp include/json.hpp
+	$(CXX) $(CXXFLAGS) -c src/parse.cpp -o $@
+
+test: all test/test
+	env LD_LIBRARY_PATH=lib test/test
+
+test/test: test/big.json test/test.o
+	$(CXX) $(LDFLAGS) -leljson test/test.o -o $@
+
+test/big.json:
+	gunzip test/big.json.gz
+
+clean:
+	rm -rf src/*.o lib/ test/*.o test/test test/test2
+
+distclean:
+	gzip test/big.json
