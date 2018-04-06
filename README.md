@@ -1,7 +1,7 @@
 libeljson
 =========
 
-A modern C++ JSON library.
+An easy-to-use C++ JSON library.
 
 Usage example
 -------------
