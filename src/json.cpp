@@ -384,7 +384,7 @@ namespace json {
     value &value::operator[](size_t idx) {
         static value nil;
         if (m_type == ARRAY) {
-            if (idx < 0 || idx >= m_u.a->size())
+            if (idx >= m_u.a->size())
                 throw out_of_bounds();
             return (*m_u.a)[idx];
         } else if (use_exceptions) {
@@ -398,7 +398,7 @@ namespace json {
     const value &value::operator[](size_t idx) const {
         static const value nil;
         if (m_type == ARRAY) {
-            if (idx < 0 || idx >= m_u.a->size())
+            if (idx >= m_u.a->size())
                 throw out_of_bounds();
             return (*m_u.a)[idx];
         } else if (use_exceptions) {

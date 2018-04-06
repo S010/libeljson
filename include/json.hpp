@@ -166,8 +166,7 @@ namespace json {
     inline bool operator==(const value& lhs, const value& rhs) {
         return lhs.equals(rhs);
     }
-};
-
+}
 
 #endif
 

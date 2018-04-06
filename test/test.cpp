@@ -37,7 +37,7 @@ static std::string dir_name(const std::string& s);
 static void        test_large_file(const std::string& path);
 static void        test_vctor();
 
-int main(int argc, char **argv) {
+int main(int, char **argv) {
     test_large_file(dir_name(*argv) + "/big.json");
     test_vctor();
 
