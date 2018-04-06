@@ -1,20 +1,22 @@
-CXX=g++
-AR=ar
-#CXX=clang++
+CXX?=g++
+AR?=ar
 
 CXXFLAGS+=-Wall
+CXXFLAGS+=-Werror
+CXXFLAGS+=-Wextra
+CXXFLAGS+=-pedantic
 CXXFLAGS+=-std=c++11
-CXXFLAGS+=-O2
+CXXFLAGS+=-O3
 CXXFLAGS+=-Iinclude
 
 LDFLAGS+=-Llib
 
-all: lib/ lib/libeljson.so
+.PHONY: all test
 
-lib/:
-	mkdir -p $@
+all: lib/libeljson.so test
 
 lib/libeljson.so: src/json.o src/parse.o
+	mkdir -p lib
 	$(CXX) -fPIC -shared -Wl,-soname,libeljson.so $^ -o $@
 
 src/json.o: src/json.cpp include/json.hpp
@@ -23,10 +25,10 @@ src/json.o: src/json.cpp include/json.hpp
 src/parse.o: src/parse.cpp include/json.hpp
 	$(CXX) -fPIC $(CXXFLAGS) -c src/parse.cpp -o $@
 
-test: all test/test
+test: test/test
 	env LD_LIBRARY_PATH=lib test/test
 
-test/test: test/big.json test/test.o
+test/test: lib/libeljson.so test/big.json test/test.o
 	$(CXX) $(LDFLAGS) -leljson test/test.o -o $@
 
 test/big.json:
